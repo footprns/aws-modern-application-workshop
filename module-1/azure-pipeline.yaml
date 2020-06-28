@@ -25,13 +25,14 @@ pool:
 #     npm install 
 #   displayName: 'Create a production Angular environment file'
 - script: |
-    echo [default] > ~/.aws/credentials
-    echo aws_access_key_id=$(aws_access_key_id) >> ~/.aws/credentials
-    echo aws_secret_access_key=$(aws_secret_access_key) >> ~/.aws/credentials
+    echo default
+    # echo [default] > ~/.aws/credentials
+    # echo aws_access_key_id=$(aws_access_key_id) >> ~/.aws/credentials
+    # echo aws_secret_access_key=$(aws_secret_access_key) >> ~/.aws/credentials
     
-    echo [default] > tee ~/.aws/config
-    echo region=ap-southeast-1 >> tee -a ~/.aws/config
-    echo output=json >> tee -a ~/.aws/config
+    # echo [default] > tee ~/.aws/config
+    # echo region=ap-southeast-1 >> tee -a ~/.aws/config
+    # echo output=json >> tee -a ~/.aws/config
   displayName: 'Set AWS credential'
 
 - script: |
