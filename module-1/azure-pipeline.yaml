@@ -38,6 +38,8 @@ steps:
 - script: |
     cd $BUILD_SOURCESDIRECTORY"/module-1/frontend"
     npm install 
+    npm install -g @angular/cli
+    npm install -g @aws-amplify/cli
     cd $BUILD_SOURCESDIRECTORY"/module-1/deploy-frontend-scripts"
     ./deploy_frontend.sh
   displayName: 'npm install'
