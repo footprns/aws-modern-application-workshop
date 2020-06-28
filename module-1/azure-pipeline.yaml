@@ -14,6 +14,6 @@ steps:
   displayName: 'npm version'
 - script: node -v
   displayName: 'node version'
-- script: env && pwd
+- script: env && pwd && ls $BUILD_SOURCESDIRECTORY
   displayName: 'environment variable'
 
