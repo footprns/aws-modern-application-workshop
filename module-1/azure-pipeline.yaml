@@ -1,12 +1,25 @@
-# File: azure-pipelines.yml
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
 trigger:
 - dotnet-multienv
 
 pool:
-  name: Azure Pipelines
+  vmImage: 'ubuntu-latest'
+
 steps:
-- bash: 
-  displayName: 'Bash Script'
-  inline: |
-    # Write your commands here
-    echo 'Hello world from yaml'
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
+
+- script: npm -v
+  displayName: 'npm version'
+- script: node -v
+  displayName: 'node version'
+
