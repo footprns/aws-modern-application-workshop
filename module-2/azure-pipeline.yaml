@@ -33,7 +33,7 @@ jobs:
   - script: |
       cd ./module-2/webapi
       docker build . -t $(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
-      aws ecr get-login
+      docker login -u AWS -p $(aws ecr get-login-password) https://$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com
       docker push $(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
     displayName: 'docker build'
     # env:
