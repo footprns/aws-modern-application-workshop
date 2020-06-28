@@ -1,4 +1,4 @@
 module "ecs" {
-    source = "./modules/ecr"
+    source = "./modules/ecs"
     name = "MythicalMysfits-Cluster"
 }
