@@ -24,7 +24,6 @@ pool:
 #     sed -i 's/false/true/g' ./module-1/frontend/src/environments/environment.prod.ts
 #     npm install 
 #   displayName: 'Create a production Angular environment file'
-
 - script: |
     echo [default] | tee ~/.aws/credentials
     echo aws_access_key_id=$(aws_access_key_id) | tee -a ~/.aws/credentials
@@ -41,5 +40,3 @@ pool:
     cd $BUILD_SOURCESDIRECTORY"/module-1/deploy-frontend-scripts"
     ./deploy_frontend.sh
   displayName: 'npm install'
-
-
