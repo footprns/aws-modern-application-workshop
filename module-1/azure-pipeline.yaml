@@ -1,0 +1,12 @@
+# File: azure-pipelines.yml
+trigger:
+- dotnet-multienv
+
+pool:
+  name: Azure Pipelines
+steps:
+- bash: 
+  displayName: 'Bash Script'
+  inline: |
+    # Write your commands here
+    echo 'Hello world from yaml'
