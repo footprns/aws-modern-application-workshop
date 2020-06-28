@@ -13,6 +13,10 @@ jobs:
 - job: BuildModule2
   pool:
     vmImage: 'ubuntu-latest'
+  variables:
+    AWS_ACCESS_KEY_ID: $(aws_access_key_id)
+    AWS_SECRET_ACCESS_KEY: $(aws_secret_access_key)
+    AWS_DEFAULT_REGION: ap-southeast-1
 
   steps:
   # - script: |
@@ -26,13 +30,10 @@ jobs:
   #     echo output=json >> ~/.aws/config
   #   displayName: 'Set AWS credential'
 
-  - script: |
-      aws cloudformation create-stack --stack-name MythicalMysfitsCoreStack --capabilities CAPABILITY_NAMED_IAM --template-body file://module-2/cfn/core.yml   
-    displayName: 'Create MythicalMysfitsCoreStack'
-    env:
-      AWS_ACCESS_KEY_ID: $(aws_access_key_id)
-      AWS_SECRET_ACCESS_KEY: $(aws_secret_access_key)
-      AWS_DEFAULT_REGION: ap-southeast-1
+  # - script: |
+  #     aws cloudformation create-stack --stack-name MythicalMysfitsCoreStack --capabilities CAPABILITY_NAMED_IAM --template-body file://module-2/cfn/core.yml   
+  #   displayName: 'Create MythicalMysfitsCoreStack'
+
   - script: |
       docker build . -t $(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
     displayName: 'docker build'
