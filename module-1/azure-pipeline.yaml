@@ -10,10 +10,15 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: npm -v
-  displayName: 'npm version'
-- script: node -v
-  displayName: 'node version'
-- script: env && pwd && ls $BUILD_SOURCESDIRECTORY
-  displayName: 'environment variable'
+# - script: npm -v
+#   displayName: 'npm version'
+# - script: node -v
+#   displayName: 'node version'
+# - script: env && pwd && ls $BUILD_SOURCESDIRECTORY
+#   displayName: 'environment variable'
+- script: |
+    cd $BUILD_SOURCESDIRECTORY"/module-1/frontend"
+    npm install 
+  displayName: 'npm install'
+
 
