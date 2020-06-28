@@ -6,27 +6,30 @@
 trigger:
 - dotnet-multienv
 
+variables:
+- group: aws
+
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-# - script: npm -v
-#   displayName: 'npm version'
+- script: echo $aws_access_key_id
+  displayName: 'npm version'
 # - script: node -v
 #   displayName: 'node version'
 # - script: env && pwd && ls $BUILD_SOURCESDIRECTORY
 #   displayName: 'environment variable'
-- script: |
-    cp ./module-1/frontend/src/environments/environment.ts ./module-1/frontend/src/environments/environment.prod.ts
-    sed -i 's/false/true/g' ./module-1/frontend/src/environments/environment.prod.ts
-    npm install 
-  displayName: 'Create a production Angular environment file'
+# - script: |
+#     cp ./module-1/frontend/src/environments/environment.ts ./module-1/frontend/src/environments/environment.prod.ts
+#     sed -i 's/false/true/g' ./module-1/frontend/src/environments/environment.prod.ts
+#     npm install 
+#   displayName: 'Create a production Angular environment file'
 
-- script: |
-    cd $BUILD_SOURCESDIRECTORY"/module-1/frontend"
-    npm install 
-    cd $BUILD_SOURCESDIRECTORY"/module-1/deploy-frontend-scripts"
-    ./deploy_frontend.sh
-  displayName: 'npm install'
+# - script: |
+#     cd $BUILD_SOURCESDIRECTORY"/module-1/frontend"
+#     npm install 
+#     cd $BUILD_SOURCESDIRECTORY"/module-1/deploy-frontend-scripts"
+#     ./deploy_frontend.sh
+#   displayName: 'npm install'
 
 
