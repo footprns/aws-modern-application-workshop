@@ -1,0 +1,29 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- dotnet-multienv
+
+variables:
+- group: aws
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+    mkdir ~/.aws
+    echo [default] > ~/.aws/credentials
+    echo aws_access_key_id=$(aws_access_key_id) >> ~/.aws/credentials
+    echo aws_secret_access_key=$(aws_secret_access_key) >> ~/.aws/credentials
+    
+    echo [default] > tee ~/.aws/config
+    echo region=ap-southeast-1 >> tee -a ~/.aws/config
+    echo output=json >> tee -a ~/.aws/config
+  displayName: 'Set AWS credential'
+
+- script: |
+    aws cloudformation create-stack --stack-name MythicalMysfitsCoreStack --capabilities CAPABILITY_NAMED_IAM --template-body file://module-2/cfn/core.yml   
+  displayName: 'Create MythicalMysfitsCoreStack'
