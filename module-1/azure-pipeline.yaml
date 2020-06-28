@@ -35,9 +35,9 @@ pool:
     # echo output=json >> tee -a ~/.aws/config
   displayName: 'Set AWS credential'
 
-- script: |
-    cd $BUILD_SOURCESDIRECTORY"/module-1/frontend"
-    npm install 
-    cd $BUILD_SOURCESDIRECTORY"/module-1/deploy-frontend-scripts"
-    ./deploy_frontend.sh
-  displayName: 'npm install'
+# - script: |
+#     cd $BUILD_SOURCESDIRECTORY"/module-1/frontend"
+#     npm install 
+#     cd $BUILD_SOURCESDIRECTORY"/module-1/deploy-frontend-scripts"
+#     ./deploy_frontend.sh
+#   displayName: 'npm install'
