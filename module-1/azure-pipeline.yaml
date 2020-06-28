@@ -19,11 +19,11 @@ steps:
 #   displayName: 'node version'
 # - script: env && pwd && ls $BUILD_SOURCESDIRECTORY
 #   displayName: 'environment variable'
-# - script: |
-#     cp ./module-1/frontend/src/environments/environment.ts ./module-1/frontend/src/environments/environment.prod.ts
-#     sed -i 's/false/true/g' ./module-1/frontend/src/environments/environment.prod.ts
-#     npm install 
-#   displayName: 'Create a production Angular environment file'
+- script: |
+    cp ./module-1/frontend/src/environments/environment.ts ./module-1/frontend/src/environments/environment.prod.ts
+    sed -i 's/false/true/g' ./module-1/frontend/src/environments/environment.prod.ts
+    npm install 
+  displayName: 'Create a production Angular environment file'
 - script: |
     mkdir ~/.aws
     echo [default] > ~/.aws/credentials
@@ -35,9 +35,9 @@ steps:
     echo output=json >> tee -a ~/.aws/config
   displayName: 'Set AWS credential'
 
-  # - script: |
-  #     cd $BUILD_SOURCESDIRECTORY"/module-1/frontend"
-  #     npm install 
-  #     cd $BUILD_SOURCESDIRECTORY"/module-1/deploy-frontend-scripts"
-  #     ./deploy_frontend.sh
-  #   displayName: 'npm install'
+  - script: |
+      cd $BUILD_SOURCESDIRECTORY"/module-1/frontend"
+      npm install 
+      cd $BUILD_SOURCESDIRECTORY"/module-1/deploy-frontend-scripts"
+      ./deploy_frontend.sh
+    displayName: 'npm install'
