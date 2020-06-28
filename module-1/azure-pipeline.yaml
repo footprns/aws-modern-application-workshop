@@ -13,7 +13,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo $aws_access_key_id
+- script: echo $(aws_access_key_id)
   displayName: 'npm version'
 # - script: node -v
 #   displayName: 'node version'
