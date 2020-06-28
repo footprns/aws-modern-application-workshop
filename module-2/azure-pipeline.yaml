@@ -10,7 +10,7 @@ variables:
 - group: aws
 
 jobs:
-- job: BuildModule-2
+- job: Build Module2
   pool:
     vmImage: 'ubuntu-latest'
 
