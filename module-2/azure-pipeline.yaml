@@ -9,22 +9,27 @@ trigger:
 variables:
 - group: aws
 
-pool:
-  vmImage: 'ubuntu-latest'
+jobs:
+- job: Build Module-2
+  pool:
+    vmImage: 'ubuntu-latest'
 
-steps:
-- script: |
-    mkdir ~/.aws
-    echo [default] > ~/.aws/credentials
-    echo aws_access_key_id=$(aws_access_key_id) >> ~/.aws/credentials
-    echo aws_secret_access_key=$(aws_secret_access_key) >> ~/.aws/credentials
-    
-    echo [default] > ~/.aws/config
-    echo region=ap-southeast-1 >> ~/.aws/config
-    echo output=json >> ~/.aws/config
-  displayName: 'Set AWS credential'
+  steps:
+  # - script: |
+  #     mkdir ~/.aws
+  #     echo [default] > ~/.aws/credentials
+  #     echo aws_access_key_id=$(aws_access_key_id) >> ~/.aws/credentials
+  #     echo aws_secret_access_key=$(aws_secret_access_key) >> ~/.aws/credentials
+      
+  #     echo [default] > ~/.aws/config
+  #     echo region=ap-southeast-1 >> ~/.aws/config
+  #     echo output=json >> ~/.aws/config
+  #   displayName: 'Set AWS credential'
 
-- script: |
-    cat ~/.aws/config
-    aws cloudformation create-stack --stack-name MythicalMysfitsCoreStack --capabilities CAPABILITY_NAMED_IAM --template-body file://module-2/cfn/core.yml   
-  displayName: 'Create MythicalMysfitsCoreStack'
+  - script: |
+      aws cloudformation create-stack --stack-name MythicalMysfitsCoreStack --capabilities CAPABILITY_NAMED_IAM --template-body file://module-2/cfn/core.yml   
+    displayName: 'Create MythicalMysfitsCoreStack'
+    env:
+      AWS_ACCESS_KEY_ID: $(aws_access_key_id)
+      AWS_SECRET_ACCESS_KEY: $(aws_secret_access_key)
+      AWS_DEFAULT_REGION: ap-southeast-1
