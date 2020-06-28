@@ -17,7 +17,7 @@ steps:
 # - script: env && pwd && ls $BUILD_SOURCESDIRECTORY
 #   displayName: 'environment variable'
 - script: |
-    cd ./module-1/frontend/src/environments/environment.ts ./module-1/frontend/src/environments/environment.prod.ts
+    cp ./module-1/frontend/src/environments/environment.ts ./module-1/frontend/src/environments/environment.prod.ts
     sed -i 's/false/true/g' ./module-1/frontend/src/environments/environment.prod.ts
     npm install 
   displayName: 'Create a production Angular environment file'
