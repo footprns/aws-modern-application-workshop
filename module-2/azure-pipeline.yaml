@@ -25,5 +25,6 @@ steps:
   displayName: 'Set AWS credential'
 
 - script: |
+    cat ~/.aws/config
     aws cloudformation create-stack --stack-name MythicalMysfitsCoreStack --capabilities CAPABILITY_NAMED_IAM --template-body file://module-2/cfn/core.yml   
   displayName: 'Create MythicalMysfitsCoreStack'
