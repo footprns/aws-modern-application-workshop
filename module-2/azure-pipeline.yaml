@@ -30,12 +30,12 @@ jobs:
   #     aws cloudformation create-stack --stack-name MythicalMysfitsCoreStack --capabilities CAPABILITY_NAMED_IAM --template-body file://module-2/cfn/core.yml   
   #   displayName: 'Create MythicalMysfitsCoreStack'
 
-  - script: |
-      cd ./module-2/webapi
-      docker build . -t $(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
-      docker login -u AWS -p $(aws ecr get-login-password) https://$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com
-      docker push $(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
-    displayName: 'docker build'
+  # - script: |
+  #     cd ./module-2/webapi
+  #     docker build . -t $(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
+  #     docker login -u AWS -p $(aws ecr get-login-password) https://$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com
+  #     docker push $(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
+  #   displayName: 'docker build'
 
   - script: |
       aws elbv2 create-load-balancer --name mysfits-nlb --scheme internet-facing --type network \
@@ -45,9 +45,13 @@ jobs:
     displayName: 'Create NLB'
   - script: |
       export REPLACE_ME_ECS_SERVICE_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-EcsServiceRole")) | .Arn' -r)
+      echo $REPLACE_ME_ECS_SERVICE_ROLE_ARN
       export REPLACE_ME_ECS_TASK_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-ECSTaskRole")) | .Arn' -r)
+      echo $REPLACE_ME_ECS_TASK_ROLE_ARN
       export REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
+      echo $REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH
       export REPLACE_ME_REGION=$(aws configure get region)
+      echo $REPLACE_ME_REGION
       sed -i 's/REPLACE_ME_ECS_SERVICE_ROLE_ARN/${REPLACE_ME_ECS_SERVICE_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json
       sed -i 's/REPLACE_ME_ECS_TASK_ROLE_ARN/${REPLACE_ME_ECS_TASK_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json
       sed -i 's/REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH/${REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH}/g' ./module-2/aws-cli/task-definition.json
