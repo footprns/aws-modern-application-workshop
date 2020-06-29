@@ -52,10 +52,10 @@ jobs:
       echo $REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH
       export REPLACE_ME_REGION=$(aws configure get region)
       echo $REPLACE_ME_REGION
-      sed -i 's/REPLACE_ME_ECS_SERVICE_ROLE_ARN/${REPLACE_ME_ECS_SERVICE_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json
-      sed -i 's/REPLACE_ME_ECS_TASK_ROLE_ARN/${REPLACE_ME_ECS_TASK_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json
-      sed -i 's/REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH/${REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH}/g' ./module-2/aws-cli/task-definition.json
-      sed -i 's/REPLACE_ME_REGION/${REPLACE_ME_REGION}/g' ./module-2/aws-cli/task-definition.json
+      sed -i "s/REPLACE_ME_ECS_SERVICE_ROLE_ARN/${REPLACE_ME_ECS_SERVICE_ROLE_ARN}/g" ./module-2/aws-cli/task-definition.json
+      sed -i "s/REPLACE_ME_ECS_TASK_ROLE_ARN/${REPLACE_ME_ECS_TASK_ROLE_ARN}/g" ./module-2/aws-cli/task-definition.json
+      sed -i "s/REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH/${REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH}/g" ./module-2/aws-cli/task-definition.json
+      sed -i "s/REPLACE_ME_REGION/${REPLACE_ME_REGION}/g" ./module-2/aws-cli/task-definition.json
       cat ./module-2/aws-cli/task-definition.json
     displayName: 'Modify task-definition.json'
 
