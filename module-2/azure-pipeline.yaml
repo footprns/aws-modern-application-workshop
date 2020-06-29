@@ -52,6 +52,7 @@ jobs:
       # export REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
       # export REPLACE_ME_REGION=$(aws configure get region)
       
+      
       # sed -i 's/REPLACE_ME_ECS_TASK_ROLE_ARN/${REPLACE_ME_ECS_TASK_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json
       # sed -i 's/REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH/${REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH}/g' ./module-2/aws-cli/task-definition.json
       # sed -i 's/REPLACE_ME_REGION/${REPLACE_ME_REGION}/g' ./module-2/aws-cli/task-definition.json
