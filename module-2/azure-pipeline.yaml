@@ -52,12 +52,21 @@ jobs:
       # export REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
       # export REPLACE_ME_REGION=$(aws configure get region)
       
-      
       # sed -i 's/REPLACE_ME_ECS_TASK_ROLE_ARN/${REPLACE_ME_ECS_TASK_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json
       # sed -i 's/REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH/${REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH}/g' ./module-2/aws-cli/task-definition.json
       # sed -i 's/REPLACE_ME_REGION/${REPLACE_ME_REGION}/g' ./module-2/aws-cli/task-definition.json
       
     displayName: 'Modify task-definition.json'
+
+  - script: |
+      aws elbv2 create-load-balancer --name mysfits-nlb --scheme internet-facing --type network \
+      --subnets \
+      $(aws ec2 describe-subnets --filter Name=tag:aws:cloudformation:logical-id,Values=PrivateSubnetOne --query "Subnets[*].[SubnetId]" --out text) \
+      $(aws ec2 describe-subnets --filter Name=tag:aws:cloudformation:logical-id,Values=PrivateSubnetTwo --query "Subnets[*].[SubnetId]" --out text)
+    displayName: 'Create NLB'
+  - script: |
+      aws ecs register-task-definition --cli-input-json file://module-2/aws-cli/task-definition.json
+    displayName: 'Register task-definition.json'
 
 
 # aws ec2 describe-security-groups --filters Name=group-name,Values=MythicalMysfitsCoreStack* --query "SecurityGroups[*].[GroupId]" --out text
@@ -78,3 +87,5 @@ jobs:
 # aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-EcsServiceRole")) | .Arn' -r
 # aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-ECSTaskRole")) | .Arn' -r
 
+# aws cloudformation list-stack-resources --stack-name MythicalMysfitsCoreStack | jq '.StackResourceSummaries[] | select(.LogicalResourceId| contains("VPC")) | .PhysicalResourceId' -r
+# aws elbv2 create-target-group --name MythicalMysfits-TargetGroup --port 8080 --protocol TCP --target-type ip --vpc-id REPLACE_WITH_VPC_ID --health-check-interval-seconds 10 --health-check-path / --health-check-protocol HTTP --healthy-threshold-count 3 --unhealthy-threshold-count 3
