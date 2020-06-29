@@ -1,9 +1,10 @@
 variable "name" {}
+variable "PrivateSubnet" {}
 resource "aws_lb" "test" {
-  name               = "test-lb-tf"
+  name               = var.name
   internal           = false
   load_balancer_type = "network"
-  subnets            = ["${aws_subnet.public.*.id}"]
+  subnets            = var.PrivateSubnet
 
   enable_deletion_protection = true
 
