@@ -45,7 +45,7 @@ jobs:
     displayName: 'Create NLB'
   - script: |
       REPLACE_ME_ECS_SERVICE_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-EcsServiceRole")) | .Arn' -r) && \
-      sed -i "s/REPLACE_ME_ECS_SERVICE_ROLE_ARN/${REPLACE_ME_ECS_SERVICE_ROLE_ARN}/g" ./module-2/aws-cli/task-definition.json && \
+      sed -i 's/REPLACE_ME_ECS_SERVICE_ROLE_ARN/${REPLACE_ME_ECS_SERVICE_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json && \
       cat ./module-2/aws-cli/task-definition.json
       # REPLACE_ME_ECS_SERVICE_ROLE_ARN=__sdfasfsafdsadfasdf__
       # export REPLACE_ME_ECS_TASK_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-ECSTaskRole")) | .Arn' -r)
