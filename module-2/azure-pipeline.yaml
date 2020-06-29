@@ -44,16 +44,18 @@ jobs:
       $(aws ec2 describe-subnets --filter Name=tag:aws:cloudformation:logical-id,Values=PrivateSubnetTwo --query "Subnets[*].[SubnetId]" --out text)
     displayName: 'Create NLB'
   - script: |
-      REPLACE_ME_ECS_SERVICE_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-EcsServiceRole")) | .Arn' -r)
+      REPLACE_ME_ECS_SERVICE_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-EcsServiceRole")) | .Arn' -r) && \
+      sed -i "s/REPLACE_ME_ECS_SERVICE_ROLE_ARN/${REPLACE_ME_ECS_SERVICE_ROLE_ARN}/g" ./module-2/aws-cli/task-definition.json && \
+      cat ./module-2/aws-cli/task-definition.json
       # REPLACE_ME_ECS_SERVICE_ROLE_ARN=__sdfasfsafdsadfasdf__
       # export REPLACE_ME_ECS_TASK_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-ECSTaskRole")) | .Arn' -r)
       # export REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
       # export REPLACE_ME_REGION=$(aws configure get region)
-      sed -i "s/REPLACE_ME_ECS_SERVICE_ROLE_ARN/${REPLACE_ME_ECS_SERVICE_ROLE_ARN}/g" ./module-2/aws-cli/task-definition.json
+      
       # sed -i 's/REPLACE_ME_ECS_TASK_ROLE_ARN/${REPLACE_ME_ECS_TASK_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json
       # sed -i 's/REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH/${REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH}/g' ./module-2/aws-cli/task-definition.json
       # sed -i 's/REPLACE_ME_REGION/${REPLACE_ME_REGION}/g' ./module-2/aws-cli/task-definition.json
-      cat ./module-2/aws-cli/task-definition.json
+      
     displayName: 'Modify task-definition.json'
 
 
