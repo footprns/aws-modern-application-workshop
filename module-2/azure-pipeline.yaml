@@ -44,8 +44,8 @@ jobs:
       $(aws ec2 describe-subnets --filter Name=tag:aws:cloudformation:logical-id,Values=PrivateSubnetTwo --query "Subnets[*].[SubnetId]" --out text)
     displayName: 'Create NLB'
   - script: |
-      # export REPLACE_ME_ECS_SERVICE_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-EcsServiceRole")) | .Arn' -r)
-      REPLACE_ME_ECS_SERVICE_ROLE_ARN=__sdfasfsafdsadfasdf__
+      REPLACE_ME_ECS_SERVICE_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-EcsServiceRole")) | .Arn' -r)
+      # REPLACE_ME_ECS_SERVICE_ROLE_ARN=__sdfasfsafdsadfasdf__
       # export REPLACE_ME_ECS_TASK_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-ECSTaskRole")) | .Arn' -r)
       # export REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
       # export REPLACE_ME_REGION=$(aws configure get region)
