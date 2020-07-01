@@ -30,11 +30,15 @@ jobs:
       cp ./module-2/frontend/src/environments/environment.ts ./module-2/frontend/src/environments/environment.prod.ts
       lb=$(aws elbv2 describe-load-balancers | jq '.LoadBalancers[] | select(.LoadBalancerName|contains("mysfits-nlb")) | .LoadBalancerArn' -r)
       lb=${lb//\//\\\/}
-      echo $lb
       sed -i "s/localhost:5001/${lb}/g" ./module-2/frontend/src/environments/environment.prod.ts
       cat ./module-2/frontend/src/environments/environment.prod.ts
       # npm install 
+      cd ./module-2/deploy-frontend-scripts
+      ./deploy_frontend.sh
     displayName: 'Replace the API Endpoint and Upload to S3'
+
+
+
 
   # - script: |
   #     aws cloudformation create-stack --stack-name MythicalMysfitsCoreStack --capabilities CAPABILITY_NAMED_IAM --template-body file://module-2/cfn/core.yml   
