@@ -604,3 +604,8 @@ awsmobilejs/\#current-backend-info
 ~awsmobilejs-*/
 environment.prod.ts
 >>>>>>> e0ea64a9ae0fccef994ed6edd247b2be6a3f0197
+
+# terraform
+**/*.tfstate
+**/*.exe
+**/.terraform

@@ -1,5 +1,4 @@
 variable "PROJECT_NAME" {}
 variable "S3_BUCKET_NAME" {}
-variable "PrivateSubnet" {
-    type = list
-}
+variable "vpc_id" {}
+variable "PublicSubnet" {}

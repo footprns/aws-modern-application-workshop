@@ -25,6 +25,12 @@ jobs:
       echo region=ap-southeast-1 >> ~/.aws/config
       echo output=json >> ~/.aws/config
     displayName: 'Set AWS credential'
+  - script: |
+      cp ./module-2/frontend/src/environments/environment.ts ./module-2/frontend/src/environments/environment.prod.ts
+      sed -i 's/localhost:5001/_lb__/g' ./module-2/frontend/src/environments/environment.prod.ts
+      cat ./module-2/frontend/src/environments/environment.prod.ts
+      # npm install 
+    displayName: 'Replace the API Endpoint and Upload to S3'
 
   # - script: |
   #     aws cloudformation create-stack --stack-name MythicalMysfitsCoreStack --capabilities CAPABILITY_NAMED_IAM --template-body file://module-2/cfn/core.yml   
@@ -37,41 +43,26 @@ jobs:
   #     docker push $(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
   #   displayName: 'docker build'
 
-  - script: |
-      aws elbv2 create-load-balancer --name mysfits-nlb --scheme internet-facing --type network \
-      --subnets \
-      $(aws ec2 describe-subnets --filter Name=tag:aws:cloudformation:logical-id,Values=PrivateSubnetOne --query "Subnets[*].[SubnetId]" --out text) \
-      $(aws ec2 describe-subnets --filter Name=tag:aws:cloudformation:logical-id,Values=PrivateSubnetTwo --query "Subnets[*].[SubnetId]" --out text)
-    displayName: 'Create NLB'
-  - script: |
-      aws elbv2 create-target-group --name MythicalMysfits-TargetGroup --port 8080 --protocol TCP --target-type ip \
-      --vpc-id $(aws cloudformation list-stack-resources --stack-name MythicalMysfitsCoreStack | jq '.StackResourceSummaries[] | select(.LogicalResourceId| contains("VPC")) | .PhysicalResourceId' -r) \
-      --health-check-interval-seconds 10 --health-check-path / --health-check-protocol HTTP --healthy-threshold-count 3 --unhealthy-threshold-count 3
-    displayName: 'Create Target Group'
-  - script: |
-      aws elbv2 create-listener \
-      --default-actions TargetGroupArn=$(aws elbv2 describe-target-groups | jq '.TargetGroups[] | select(.TargetGroupArn|contains("MythicalMysfits-TargetGroup")) | .TargetGroupArn' -r),Type=forward \
-      --load-balancer-arn $(aws elbv2 describe-load-balancers | jq '.LoadBalancers[] | select(.LoadBalancerName|contains("mysfits-nlb")) | .LoadBalancerArn' -r) \
-      --port 80 --protocol TCP
-    displayName: 'Create Listener'
-  - script: |
-      REPLACE_ME_ECS_SERVICE_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-EcsServiceRole")) | .Arn' -r) && \
-      sed -i 's/REPLACE_ME_ECS_SERVICE_ROLE_ARN/${REPLACE_ME_ECS_SERVICE_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json && \
-      cat ./module-2/aws-cli/task-definition.json
-      # REPLACE_ME_ECS_SERVICE_ROLE_ARN=__sdfasfsafdsadfasdf__
-      # export REPLACE_ME_ECS_TASK_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-ECSTaskRole")) | .Arn' -r)
-      # export REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
-      # export REPLACE_ME_REGION=$(aws configure get region)
+  # - script: |
+  #     REPLACE_ME_ECS_SERVICE_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-EcsServiceRole")) | .Arn' -r) && \
+  #     sed -i 's/REPLACE_ME_ECS_SERVICE_ROLE_ARN/${REPLACE_ME_ECS_SERVICE_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json && \
+  #     cat ./module-2/aws-cli/task-definition.json
+  #     # REPLACE_ME_ECS_SERVICE_ROLE_ARN=__sdfasfsafdsadfasdf__
+  #     # export REPLACE_ME_ECS_TASK_ROLE_ARN=$(aws iam list-roles | jq '.Roles[] | select(.RoleName| contains("MythicalMysfitsCoreStack-ECSTaskRole")) | .Arn' -r)
+  #     # export REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$(aws configure get region).amazonaws.com/mythicalmysfits/service:latest
+  #     # export REPLACE_ME_REGION=$(aws configure get region)
       
-      # sed -i 's/REPLACE_ME_ECS_TASK_ROLE_ARN/${REPLACE_ME_ECS_TASK_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json
-      # sed -i 's/REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH/${REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH}/g' ./module-2/aws-cli/task-definition.json
-      # sed -i 's/REPLACE_ME_REGION/${REPLACE_ME_REGION}/g' ./module-2/aws-cli/task-definition.json
-      
-    displayName: 'Modify task-definition.json'
+  #     # sed -i 's/REPLACE_ME_ECS_TASK_ROLE_ARN/${REPLACE_ME_ECS_TASK_ROLE_ARN}/g' ./module-2/aws-cli/task-definition.json
+  #     # sed -i 's/REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH/${REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH}/g' ./module-2/aws-cli/task-definition.json
+  #     # sed -i 's/REPLACE_ME_REGION/${REPLACE_ME_REGION}/g' ./module-2/aws-cli/task-definition.json
+  #   displayName: 'Modify task-definition.json'
 
-  - script: |
-      aws ecs register-task-definition --cli-input-json file://module-2/aws-cli/task-definition.json
-    displayName: 'Register task-definition.json'
+  # - script: |
+  #     aws ecs register-task-definition --cli-input-json file://module-2/aws-cli/task-definition.json
+  #   displayName: 'Register task-definition.json'
+  # - script: |
+  #     aws ecs create-service --cli-input-json file://module-2/aws-cli/service-definition.json
+  #   displayName: 'Register service-definition.json'
 
 
 # aws ec2 describe-security-groups --filters Name=group-name,Values=MythicalMysfitsCoreStack* --query "SecurityGroups[*].[GroupId]" --out text
@@ -96,3 +87,5 @@ jobs:
 # aws elbv2 create-target-group --name MythicalMysfits-TargetGroup --port 8080 --protocol TCP --target-type ip --vpc-id REPLACE_WITH_VPC_ID --health-check-interval-seconds 10 --health-check-path / --health-check-protocol HTTP --healthy-threshold-count 3 --unhealthy-threshold-count 3
 # aws elbv2 describe-target-groups | jq '.TargetGroups[] | select(.TargetGroupArn|contains("MythicalMysfits-TargetGroup")) | .TargetGroupArn' -r
 # aws elbv2 describe-load-balancers | jq '.LoadBalancers[] | select(.LoadBalancerName|contains("mysfits-nlb")) | .LoadBalancerArn' -r
+
+# aws cloudformation describe-stacks --stack-name MythicalMysfitsCoreStack | jq '.Stacks[].Outputs[] | select(.OutputKey|contains("ECSTaskRole")) | .OutputValue' -r
