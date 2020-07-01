@@ -33,7 +33,9 @@ jobs:
       sed -i "s/localhost:5001/${lb}/g" ./module-2/frontend/src/environments/environment.prod.ts
       cat ./module-2/frontend/src/environments/environment.prod.ts
       # npm install 
-      cd ./module-2/deploy-frontend-scripts
+      cd $BUILD_SOURCESDIRECTORY"/module-2/frontend"
+      npm install 
+      cd $BUILD_SOURCESDIRECTORY"/module-2/deploy-frontend-scripts"
       ./deploy_frontend.sh
     displayName: 'Replace the API Endpoint and Upload to S3'
 
