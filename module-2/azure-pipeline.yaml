@@ -27,7 +27,7 @@ jobs:
     displayName: 'Set AWS credential'
   - script: |
       cp ./module-2/frontend/src/environments/environment.ts ./module-2/frontend/src/environments/environment.prod.ts
-      sed -i 's/localhost:5001/_lb__/g' ./module-2/frontend/src/environments/environment.prod.ts
+      sed -i 's/localhost:5001/$(aws elbv2 describe-load-balancers | jq '.LoadBalancers[] | select(.LoadBalancerName|contains("mysfits-nlb")) | .LoadBalancerArn' -r)/g' ./module-2/frontend/src/environments/environment.prod.ts
       cat ./module-2/frontend/src/environments/environment.prod.ts
       # npm install 
     displayName: 'Replace the API Endpoint and Upload to S3'
